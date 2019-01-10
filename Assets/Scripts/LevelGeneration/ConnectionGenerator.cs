@@ -8,11 +8,10 @@ namespace Project{
         {
             items.ForEach( i =>
             {
-                var item = i.GetComponent<Corridor>();
+                var item = i.GetComponent<IConnectable>();
                 //Check if item is corridor
                 if (item != null)
                 {
-
                     item.SetupConnections();
                     //TODO Connect its doors to the associations specified in their attached script
                 }

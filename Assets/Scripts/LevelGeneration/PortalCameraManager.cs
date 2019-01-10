@@ -49,9 +49,14 @@ public class PortalCameraManager : MonoBehaviour {
             var loc = location.GetComponent<RoomBehaviour>();
             connections = loc.subrooms.ToArray();
         }
-        else
+        else if(location.GetComponent<Corridor>() != null)
         {
             var loc = location.GetComponent<Corridor>();
+            connections = loc.Connections.ToArray();
+        }
+        else if (location.GetComponent<Stairs>() != null)
+        {
+            var loc = location.GetComponent<Stairs>();
             connections = loc.Connections.ToArray();
         }
         return connections;

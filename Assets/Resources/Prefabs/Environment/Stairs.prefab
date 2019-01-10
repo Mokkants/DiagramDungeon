@@ -55,6 +55,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4043640766857308}
+  - component: {fileID: 114968502334345646}
   m_Layer: 0
   m_Name: Stairs
   m_TagString: Untagged
@@ -2762,6 +2763,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   receiver: {fileID: 0}
   destination: 
+--- !u!114 &114968502334345646
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1063657265602570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34386a6018d9db344af07921a91c11b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Connections: []
+  superClass: 
+  subClassesCorridor: {fileID: 0}
+  superClassPortal: {fileID: 4009029169194702}
+  subClassesPortal: {fileID: 4337088099284766}
 --- !u!124 &124016149675627256
 Behaviour:
   m_ObjectHideFlags: 1

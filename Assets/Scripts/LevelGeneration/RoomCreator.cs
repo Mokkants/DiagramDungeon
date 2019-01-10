@@ -127,6 +127,7 @@ namespace Project
             //Setup Staircase
             var stairs = InstantiateEnvironmentItem(_stairs);
 
+
             Transform subClassTeleporter = null;
             Transform superClassTeleporter = null;
 
@@ -166,6 +167,12 @@ namespace Project
                     portal.GetComponent<Portal>().receiver = subClassTeleporter;
                 }
             }
+            if (corridor != null)
+            {
+                var stairsBehaviour = stairs.GetComponent<Stairs>();
+                stairsBehaviour.subClassesCorridor = corridor;
+                stairsBehaviour.superClass = room.Info.superclass;
+            }
             
         }
 
@@ -186,12 +193,6 @@ namespace Project
 
             int connections = connectionsList.Length;
 
-            if (connections == 1)
-            {
-                corr = InstantiateEnvironmentItem(_corridor);
-            }
-            else if (connections >= 2)
-            {
                 corr = InstantiateEnvironmentItem(_2doorCorridor);
                 currentEndPoint = corr.transform.Find("Endpoint");
                 connections -= 2;
@@ -207,7 +208,6 @@ namespace Project
                 var ending = connections == 1 ? Instantiate(_doorwayWall) : Instantiate(_wallEnding);
                 ending.transform.position = currentEndPoint.position;
                 ending.transform.parent = corr.transform;
-            }
             //Attach connection names to Corridor
             var corrBehaviour = corr.GetComponent<Corridor>();
             corrBehaviour.ConnectionNames = connectionsList;
