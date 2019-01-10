@@ -27,6 +27,7 @@ namespace Project
         private GameObject _2doorCorridorEx;
         private GameObject _doorwayWall;
         private GameObject _wallEnding;
+        private GameObject _stairs;
 
         public void OnEnable()
         {
@@ -36,6 +37,7 @@ namespace Project
             _doorwayWall = Resources.Load<GameObject>("Prefabs/Environment/DoorwayWall");
             _wallEnding = Resources.Load<GameObject>("Prefabs/Environment/WallEnding");
             _actorCreator = ScriptableObject.CreateInstance("ActorCreator") as ActorCreator;
+            _stairs = Resources.Load<GameObject>("Prefabs/Environment/Stairs");
             items = new List<GameObject>();
         }
 
@@ -121,23 +123,50 @@ namespace Project
 
         private void CreateInheritenceStairs(Room room, GameObject newRoom)
         {
+
+            //Setup Staircase
+            var stairs = InstantiateEnvironmentItem(_stairs);
+
+            Transform subClassTeleporter = null;
+            Transform superClassTeleporter = null;
+
+            for (int i = 0; i < stairs.transform.childCount; i++)
+            {
+                if(stairs.transform.GetChild(i).tag == "BackDoorEntry")
+                {
+                    var portal = stairs.transform.GetChild(i).Find("Doorway/PortalTeleporter");
+                    newRoom.GetComponent<RoomBehaviour>().InheritenceRoomTeleporter = portal;
+                    portal.GetComponent<Portal>().receiver = newRoom.GetComponent<RoomBehaviour>().FrontTeleporter;
+                }
+                else if(stairs.transform.GetChild(i).tag == "LeftDoorEntry")
+                {
+                    subClassTeleporter = stairs.transform.GetChild(i).Find("PortalTeleporter");
+                }
+                else if (stairs.transform.GetChild(i).tag == "RightDoorEntry")
+                {
+                    superClassTeleporter = stairs.transform.GetChild(i).Find("PortalTeleporter");
+                }
+            }
+
+            for (int i = 0; i < stairs.transform.childCount; i++)
+            {
+                if (stairs.transform.GetChild(i).CompareTag("PortalCam"))
+                {
+                    stairs.transform.GetChild(i).GetComponent<PortalCamera>().OtherPortal = newRoom.GetComponent<RoomBehaviour>().FrontTeleporter.transform.parent.Find("Portal");
+                }
+            }
+
+            //Setup subclasses corridor
             var corridor = BuildCorridor(room.Info.subclasses);
             for (int i = 0; i < corridor.transform.childCount; i++)
             {
                 if (corridor.transform.GetChild(i).tag == "BackDoorEntry")
                 {
                     var portal = corridor.transform.GetChild(i).Find("Doorway/PortalTeleporter");
-                    newRoom.GetComponent<RoomBehaviour>().InheritenceRoomTeleporter = portal;
-                    portal.GetComponent<Portal>().receiver = newRoom.GetComponent<RoomBehaviour>().FrontTeleporter;
+                    portal.GetComponent<Portal>().receiver = subClassTeleporter;
                 }
             }
-            for (int i = 0; i < corridor.transform.childCount; i++)
-            {
-                if (corridor.transform.GetChild(i).CompareTag("PortalCam"))
-                {
-                    corridor.transform.GetChild(i).GetComponent<PortalCamera>().OtherPortal = newRoom.GetComponent<RoomBehaviour>().FrontTeleporter.transform.parent.Find("Portal");
-                }
-            }
+            
         }
 
         //Centralize logic required for each addition
